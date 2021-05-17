@@ -1,1 +1,1 @@
-package trees
+package binarytree
