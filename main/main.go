@@ -8,17 +8,16 @@ import (
 
 func main() {
 	fmt.Println("Hello, world!")
-
-	var at = &trees.AvlTree{}
-	fmt.Println("Hello, world1!")
-	var bt = &trees.BinaryTree{}
-	fmt.Println("Hello, world2!")
+	at := trees.AvlTree{}
+	bt := trees.BinaryTree{Root: &trees.Node{}, CurrentKey: 0}
 	var tree trees.Tree
-	fmt.Println("Hello, xd!")
-	tree = at
+	fmt.Print(bt.Root)
+	tree = &at
 	tree.Insert(2)
 	tree.Search(2)
-	tree = bt
-	tree.Insert(2)
+	tree = &bt
+	//fmt.Println(tree.Insert(2), "Comparaciones")
+	//fmt.Println(bt.Root)
+	//fmt.Println(tree.Insert(4), "Comparaciones")
 	tree.Search(2)
 }

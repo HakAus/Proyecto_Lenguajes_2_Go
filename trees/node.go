@@ -5,10 +5,19 @@ import "fmt"
 type Node struct {
 	key           int
 	value         int
-	parent        *Node
 	leftChildren  *Node
 	rightChildren *Node
 	weight        int8
+}
+
+func NewNode(root *Node, newKey int, toInsert int) int {
+	fmt.Print(root)
+	root.key = newKey
+	root.value = toInsert
+	root.leftChildren = &Node{}
+	root.rightChildren = &Node{}
+	root.weight = 0
+	return newKey + 1
 }
 
 type Tree interface {

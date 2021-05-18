@@ -1,6 +1,9 @@
 package trees
 
-import "fmt"
+import (
+	"fmt"
+)
+
 
 type AvlTree struct {
 	root *Node
