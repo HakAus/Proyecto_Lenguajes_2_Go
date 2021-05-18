@@ -23,7 +23,7 @@ func (node *Node) Insert(tree *BinaryTree, toInsert int) (comp int) {
 		fmt.Println("OwO")
 		return node.leftChildren.Insert(tree, toInsert) + 2
 	} else {
-		return node.rightChildren.Insert(tree, toInsert) + 3
+		return node.rightChildren.Insert(tree, toInsert) + 2
 	}
 }
 
