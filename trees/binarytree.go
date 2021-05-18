@@ -8,20 +8,22 @@ type BinaryTree struct {
 }
 
 func (tree *BinaryTree) Insert(toInsert int) int {
-	return Insert(tree, tree.Root, toInsert)
+	fmt.Println("Start")
+	fmt.Println("Desde Insert Root", &tree.Root, " ", tree.Root)
+	fmt.Println("Desde Insert Tree ", tree)
+	return tree.Root.Insert(tree, toInsert)
 }
 
-func Insert(tree *BinaryTree, root *Node, toInsert int) (comp int) {
-	fmt.Println(root)
-	return 1
-	if root == nil {
-		fmt.Println(root)
-		tree.CurrentKey = NewNode(root, tree.CurrentKey, toInsert)
+func (node *Node) Insert(tree *BinaryTree, toInsert int) (comp int) {
+	emptyNode := Node{}
+	if *node == emptyNode {
+		*node, tree.CurrentKey = NewNode(tree.CurrentKey, toInsert)
 		return 1
-	} else if root.value < toInsert {
-		return Insert(tree, root.leftChildren, toInsert) + 2
+	} else if node.value <= toInsert {
+		fmt.Println("OwO")
+		return node.leftChildren.Insert(tree, toInsert) + 2
 	} else {
-		return Insert(tree, root.rightChildren, toInsert) + 3
+		return node.rightChildren.Insert(tree, toInsert) + 3
 	}
 }
 

@@ -10,14 +10,14 @@ type Node struct {
 	weight        int8
 }
 
-func NewNode(root *Node, newKey int, toInsert int) int {
-	fmt.Print(root)
-	root.key = newKey
-	root.value = toInsert
-	root.leftChildren = &Node{}
-	root.rightChildren = &Node{}
-	root.weight = 0
-	return newKey + 1
+func NewNode(newKey int, toInsert int) (Node, int) {
+	newNode := Node{
+		key:           newKey,
+		value:         toInsert,
+		leftChildren:  &Node{},
+		rightChildren: &Node{},
+		weight:        0}
+	return newNode, newKey + 1
 }
 
 type Tree interface {
