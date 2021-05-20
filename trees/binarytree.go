@@ -19,14 +19,20 @@ func (node *Node) Insert(tree *BinaryTree, toInsert int) (comp int) {
 	if *node == emptyNode {
 		*node, tree.CurrentKey = NewNode(tree.CurrentKey, toInsert)
 		return 1
-	} else if node.value <= toInsert {
-		fmt.Println("OwO")
+	} else if toInsert <= node.value {
+		fmt.Println("Izquierda")
 		return node.leftChildren.Insert(tree, toInsert) + 2
 	} else {
+		fmt.Println("Derecha")
 		return node.rightChildren.Insert(tree, toInsert) + 2
 	}
 }
 
+func (tree *BinaryTree) GetRoot() *Node {
+	return tree.Root
+}
+
 func (tree *BinaryTree) Search(toFind int) (bool, int) {
-	return TreeSearch(toFind)
+	var itree Tree = tree
+	return TreeSearch(itree, toFind)
 }

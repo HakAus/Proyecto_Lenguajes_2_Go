@@ -21,5 +21,7 @@ func main() {
 	fmt.Println(bt.CurrentKey)
 	fmt.Println(tree.Insert(4), "Comparaciones")
 	fmt.Println(bt.Root)
-	tree.Search(2)
+	fmt.Println(tree.Insert(10))
+	fmt.Println(tree.Insert(1))
+	fmt.Println(tree.Search(10))
 }
