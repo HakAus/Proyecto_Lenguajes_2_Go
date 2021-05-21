@@ -3,36 +3,82 @@ package trees
 import "fmt"
 
 type BinaryTree struct {
-	Root       *Node
-	CurrentKey int
+	key			   int
+	value          int
+	leftChildren   *BinaryTree
+	rightChildren  *BinaryTree
 }
 
-func (tree *BinaryTree) Insert(toInsert int) int {
-	fmt.Println("Start")
-	fmt.Println("Desde Insert Root", &tree.Root, " ", tree.Root)
-	fmt.Println("Desde Insert Tree ", tree)
-	return tree.Root.Insert(tree, toInsert)
-}
+// INTERFACE
 
-func (node *Node) Insert(tree *BinaryTree, toInsert int) (comp int) {
-	emptyNode := Node{}
-	if *node == emptyNode {
-		*node, tree.CurrentKey = NewNode(tree.CurrentKey, toInsert)
-		return 1
-	} else if toInsert <= node.value {
-		fmt.Println("Izquierda")
-		return node.leftChildren.Insert(tree, toInsert) + 2
+func (tree *BinaryTree) Insert(keyToInsert int) int {
+
+	if tree.IsBranchless() {
+		if keyToInsert == tree.key {
+			tree.value++
+			return + 1
+		} else {
+			*tree = NewBinaryTree(keyToInsert, 1)
+			return + 1
+		}
+	}
+	if keyToInsert == tree.key {
+		tree.value++
+		return + 1
+	} else if keyToInsert < tree.key {
+		return tree.leftChildren.Insert(keyToInsert) + 2
 	} else {
-		fmt.Println("Derecha")
-		return node.rightChildren.Insert(tree, toInsert) + 2
+		return tree.rightChildren.Insert(keyToInsert) + 2
 	}
 }
 
-func (tree *BinaryTree) GetRoot() *Node {
-	return tree.Root
+func (tree *BinaryTree) Search(toFind int) (bool, int) {
+	var itree ITree = tree
+	return TreeSearch(itree, toFind)
 }
 
-func (tree *BinaryTree) Search(toFind int) (bool, int) {
-	var itree Tree = tree
-	return TreeSearch(itree, toFind)
+func (tree *BinaryTree) IsEmpty() bool {
+	return tree.key == 0 && tree.value == 0 && tree.leftChildren == nil && tree.rightChildren == nil
+}
+
+func (tree *BinaryTree) IsBranchless() bool {
+	return tree.leftChildren == nil && tree.rightChildren == nil
+}
+
+func (tree *BinaryTree) GetKey() int {
+	return tree.key
+}
+
+func (tree *BinaryTree) GetValue() int {
+	return tree.value
+}
+
+func (tree *BinaryTree) GetLeftChildren() ITree {
+	return tree.leftChildren
+}
+
+func (tree * BinaryTree) GetRightChildren() ITree {
+	return tree.rightChildren
+}
+
+func (tree *BinaryTree) IRD() {
+	Binary_IRD_Rec(tree)
+}
+
+// LOCAL
+func NewBinaryTree(newKey int, valueToInsert int) (BinaryTree) {
+	newTree := BinaryTree{
+		key:           newKey,
+		value:         valueToInsert,
+		leftChildren:  &BinaryTree{},
+		rightChildren: &BinaryTree{}}
+	return newTree
+}
+
+func Binary_IRD_Rec(tree *BinaryTree) {
+	if !tree.IsBranchless() {
+		Binary_IRD_Rec(tree.leftChildren)
+		fmt.Println("key: ",tree.key, "value: ", tree.value)
+		Binary_IRD_Rec(tree.rightChildren)
+	}
 }

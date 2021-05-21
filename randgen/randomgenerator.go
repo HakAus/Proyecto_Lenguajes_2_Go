@@ -45,7 +45,7 @@ func GetRandomArray(seed int, size int) []int {
 		// Generate n random numbers
 		nextRandom := randomIntGenerator(seed)
 		for index := 0; index < size; index++ {
-			array[index] = mapNumber(nextRandom(),0,4095,69,199)
+			array[index] = mapNumber(nextRandom(),0,4095,0,199)
 		}
 		return array
 	} else {
