@@ -8,7 +8,6 @@ import "fmt"
 func randomIntGenerator(seed int) func() int {
 	var a, b, m int = 109, 853, 4096
 	return func() int {
-		// Para que el resultado este en el rango 0 .. 199
 		seed = ((a * seed + b) % m) 
 		return seed
 	}
@@ -34,6 +33,7 @@ func isValidSize(size int) bool {
 	return size >= 200 || size <= 1000
 }
 
+// Para que el resultado este en el rango 0 .. 199
 func mapNumber(value, start1, stop1, start2, stop2 int) int {
 	return int(float32((value - start1)) / float32((stop1 - start1)) * float32((stop2 - start2)) + float32(start2))
 }

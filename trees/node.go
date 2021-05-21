@@ -7,7 +7,10 @@ type Node struct {
 	value         int
 	leftChildren  *Node
 	rightChildren *Node
-	weight        int8
+}
+
+type AVLNode struct {
+	
 }
 
 func NewNode(newKey int, toInsert int) (Node, int) {
@@ -15,8 +18,7 @@ func NewNode(newKey int, toInsert int) (Node, int) {
 		key:           newKey,
 		value:         toInsert,
 		leftChildren:  &Node{},
-		rightChildren: &Node{},
-		weight:        0}
+		rightChildren: &Node{}}
 	return newNode, newKey + 1
 }
 

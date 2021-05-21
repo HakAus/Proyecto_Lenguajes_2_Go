@@ -4,17 +4,16 @@ import (
 	"fmt"
 )
 
-
-type AvlTree struct {
+type AVLTree struct {
 	root *Node
 }
 
-func (tree *AvlTree) Insert(toInsert int) int {
+func (tree *AVLTree) Insert(toInsert int) int {
 	fmt.Println("Avl Insert")
 	tree.root = nil
 	return 0
 }
 
-func (tree *AvlTree) Search(toFind int) (bool, int) {
+func (tree *AVLTree) Search(toFind int) (bool, int) {
 	return TreeSearch(toFind)
 }
