@@ -4,16 +4,21 @@ import (
 	"fmt"
 )
 
-type AVLTree struct {
-	root *Node
+
+type AVlTree struct {
+	Root *Node
 }
 
-func (tree *AVLTree) Insert(toInsert int) int {
+func (tree *AVlTree) Insert(toInsert int) int {
 	fmt.Println("Avl Insert")
-	tree.root = nil
 	return 0
 }
 
-func (tree *AVLTree) Search(toFind int) (bool, int) {
-	return TreeSearch(toFind)
+func (tree *AVlTree) GetRoot() *Node{
+	return tree.Root;
+}
+
+func (tree *AVlTree) Search(toFind int) (bool, int) {
+	var itree Tree = tree
+	return TreeSearch(itree,toFind)
 }
