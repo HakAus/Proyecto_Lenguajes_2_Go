@@ -12,23 +12,18 @@ type BinaryTree struct {
 // INTERFACE
 
 func (tree *BinaryTree) Insert(keyToInsert int) int {
-
-	if tree.IsBranchless() {
+	if tree.IsEmpty() {
+		*tree = NewBinaryTree(keyToInsert, 1)
+		return + 1
+	} else {
 		if keyToInsert == tree.key {
 			tree.value++
 			return + 1
+		} else if keyToInsert < tree.key {
+			return tree.leftChildren.Insert(keyToInsert) + 2
 		} else {
-			*tree = NewBinaryTree(keyToInsert, 1)
-			return + 1
+			return tree.rightChildren.Insert(keyToInsert) + 2
 		}
-	}
-	if keyToInsert == tree.key {
-		tree.value++
-		return + 1
-	} else if keyToInsert < tree.key {
-		return tree.leftChildren.Insert(keyToInsert) + 2
-	} else {
-		return tree.rightChildren.Insert(keyToInsert) + 2
 	}
 }
 
@@ -82,3 +77,4 @@ func Binary_IRD_Rec(tree *BinaryTree) {
 		Binary_IRD_Rec(tree.rightChildren)
 	}
 }
+
