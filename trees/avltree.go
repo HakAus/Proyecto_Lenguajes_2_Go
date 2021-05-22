@@ -1,10 +1,9 @@
 package trees
 
-import "fmt"
+import (
+	"fmt"
+)
 
-// import (
-// 	"fmt"
-// )
 type BalanceFactor int 
 
 const (
@@ -25,7 +24,12 @@ type AVLTree struct {
 
 func (tree *AVLTree) Insert(keyToInsert int) int {
 	comparisons := 0
-	tree.AVL_Insert(keyToInsert,&comparisons,false)
+	change := false
+	fmt.Println("\nStart")
+	fmt.Printf("original avl address: %p \n", tree)
+	AVL_Insert(tree, keyToInsert,&comparisons,&change)
+	fmt.Println("Luego de la insercion")
+	// fmt.Println(tree.toString(0))
 	return comparisons
 }
 
@@ -81,69 +85,187 @@ func AVL_IRD_Rec(tree *AVLTree) {
 	}
 }
 
-func (avl *AVLTree) AVL_Insert(keyToInsert int, comparisons *int, change bool) int {
+func AVL_Insert(avl *AVLTree, keyToInsert int, comparisons *int, change *bool) *AVLTree {
+	fmt.Printf("avl address: %p | avl key: %d | key to insert: %d \n",avl, avl.key, keyToInsert)
 	if avl.IsEmpty() {
 		*avl = NewAVLTree(keyToInsert, 1)
-		change = true
+		fmt.Printf("New tree added: %p | new key: %d \n", avl, avl.key)
+		*change = true
 	} else {
 		if keyToInsert == avl.key {
 			avl.value++
 			*comparisons += 1
 		} else if keyToInsert < avl.key {
 			*comparisons += 2
-			avl.leftChildren.Insert(keyToInsert)
-			if (change) {
+			fmt.Println("Going left ...")
+			avl.leftChildren = AVL_Insert(avl.leftChildren, keyToInsert, comparisons, change)
+			fmt.Printf("Unwound avl address: %p | key: %d \n", avl, avl.key)
+
+			if (*change) {
 				switch avl.bf {
 				case rightImbalanced:
+					// fmt.Println("rightImbalanced")
 					avl.bf = balanced
-					change = false
+					*change = false
 				case balanced:
+					// fmt.Println("balanced")
 					avl.bf = leftImbalanced
 				case leftImbalanced:
+					// fmt.Println("leftImbalanced")
 					n1 := avl.leftChildren;
 					if n1.bf == leftImbalanced {
-						avl.rotateLeftTwice()
+						avl.rotateRight()
 					} else {
 						avl.rotateLeftRight()
 					}
-					change = false
+					*change = false
 				}
+				fmt.Println("Luego del balanceo")
 			}
 		} else {
-			
 			*comparisons += 2
-			avl.rightChildren.Insert(keyToInsert)
-			if (change) {
+			fmt.Println("Going right ...")
+			avl.rightChildren = AVL_Insert(avl.rightChildren, keyToInsert, comparisons, change)
+			fmt.Printf("Unwound avl address: %p | key: %d \n", avl, avl.key)
+			
+			if (*change) {
 				switch avl.bf {
 				case rightImbalanced:
+					// fmt.Println("rightImbalanced")
 					n1 := avl.rightChildren
 					if n1.bf == rightImbalanced {
-						avl.rotateRightTwice()
+						avl.rotateLeft()
+						fmt.Printf("FUR REAL: %p", avl)
 					} else {
 						avl.rotateRightLeft()
 					}
-					change = false
+					*change = false
 				case balanced:
+					// fmt.Println("balanced")
 					avl.bf = rightImbalanced
 				case leftImbalanced:
+					// fmt.Println("leftImbalanced")
 					avl.bf = balanced
-					change = false
+					*change = false
 				}
 			}
+			fmt.Println("Luego del balanceo")
 		}
 	}
-	return *comparisons
+	fmt.Println("BEFORE RETURNING")
+	fmt.Printf("avl address: %p | avl key: %d \n", avl, avl.key)
+	fmt.Printf("avl left address: %p | avl key: %d \n", avl.leftChildren, avl.leftChildren.key)
+	fmt.Printf("avl right address: %p | avl key: %d \n", avl.rightChildren, avl.rightChildren.key)
+	return avl
 }
 
-func (avl *AVLTree) rotateLeftTwice() {
+func (root *AVLTree) rotateLeft() {
+	var newRoot *AVLTree = root.rightChildren
+	root.rightChildren = newRoot.leftChildren
+	var newLeft AVLTree = *root
+	newRoot.leftChildren = &newLeft
+	*root = *newRoot
+	newRoot = nil
+	oldRoot := root.leftChildren
 
+	// Adjust the balance factor
+	if root.bf == rightImbalanced {
+		oldRoot.bf = balanced
+		root.bf = balanced
+	} else {
+		oldRoot.bf = rightImbalanced
+		root.bf = leftImbalanced
+	}
 }
-func (avl *AVLTree) rotateRightTwice(){
+func (root *AVLTree) rotateRight() {
+	var newRoot *AVLTree = root.leftChildren
+	root.leftChildren = newRoot.rightChildren
+	var newRight AVLTree = *root
+	newRoot.rightChildren = &newRight
+	*root = *newRoot
+	newRoot = nil
+	oldRoot := root.rightChildren
 
+	// Adjust the balance factor
+	if root.bf == leftImbalanced {
+		oldRoot.bf = balanced
+		root.bf = balanced
+	} else {
+		oldRoot.bf = leftImbalanced
+		root.bf = rightImbalanced
+	}
 }
-func (avl *AVLTree) rotateLeftRight() {
 
+func (root *AVLTree) rotateLeftRight() {
+	var newLeft *AVLTree = root.leftChildren
+	var newRoot *AVLTree = newLeft.rightChildren
+	newLeft.rightChildren = newRoot.leftChildren
+	newRoot.leftChildren = newLeft
+	root.leftChildren = newRoot.rightChildren
+	var newRight AVLTree = *root
+	newRoot.rightChildren = &newRight
+	*root = *newRoot
+	oldRoot := root.rightChildren
+	oldRootLeft := root.leftChildren
+
+	// Adjust balance factor
+	if root.bf == rightImbalanced {
+		oldRootLeft.bf = leftImbalanced
+	} else {
+		oldRootLeft.bf = balanced
+	}
+
+	if root.bf == leftImbalanced {
+		oldRoot.bf = rightImbalanced
+	} else {
+		oldRoot.bf = balanced
+	}
+
+	root.bf = balanced
 }
-func (avl *AVLTree) rotateRightLeft() {
+func (root *AVLTree) rotateRightLeft() {
 
+	var newRight *AVLTree = root.rightChildren
+	var newRoot *AVLTree = newRight.leftChildren
+	newRight.leftChildren = newRoot.rightChildren
+	newRoot.rightChildren = newRight
+	root.rightChildren = newRoot.leftChildren
+	var newLeft AVLTree = *root
+	newRoot.leftChildren = &newLeft
+	*root = *newRoot
+	oldRoot := root.leftChildren
+	oldRootRight := root.rightChildren
+
+	// Adjust balance factor
+	if root.bf == rightImbalanced {
+		oldRoot.bf = leftImbalanced
+	} else {
+		oldRoot.bf = balanced
+	}
+
+	if root.bf == leftImbalanced {
+		oldRootRight.bf = rightImbalanced
+	} else {
+		oldRootRight.bf = balanced
+	}
+	root.bf = balanced
+}
+
+
+func (avl *AVLTree) ToString(count int) string {
+	var indent string;
+	count++
+	if !avl.IsEmpty() {
+		var buff string;
+		buff += "[Key: " + fmt.Sprintf("%d", avl.key)
+		buff += "| Value: " + fmt.Sprintf("%d",avl.value)
+		buff += "| BF: " + fmt.Sprintf("%d",avl.bf) + "]"
+		for i := 0; i < count; i++ {
+			indent += "\t"
+		}
+		buff += "\n" + indent + avl.leftChildren.ToString(count)
+		buff += "\n" + indent + avl.rightChildren.ToString(count)
+		return buff
+	}
+	return "Empty"
 }
