@@ -1,6 +1,9 @@
 package trees
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type BinaryTree struct {
 	key           int
@@ -116,10 +119,29 @@ func (root *BinaryTree) backboneTree() bool {
 //Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculador y se rotan en la primera fase
 //Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
 
+func (root *BinaryTree) CountNodes() int { //Considerar si contarlo o mantener un contador en el arbol
+	if root.IsEmpty() {
+		return 0
+	}
+	return root.leftChildren.CountNodes() + root.rightChildren.CountNodes() + 1
+}
+
+func getDesiredNodes(value int) int {
+	count := 0
+	desired := count
+	exp := 0.0
+	for count <= value {
+		desired = count
+		count += int(math.Pow(2, exp))
+		exp += 1
+	}
+	return value - desired
+}
+
 func (root *BinaryTree) treeBackbone() {
-	//Altura deseada con log2(totalDeNodos).ceil()
-	desiredNodes := 2
-	//desiredNodes -= 1
+	fmt.Println(root.CountNodes())
+	desiredNodes := getDesiredNodes(root.CountNodes())
+	fmt.Println("whahoooo", desiredNodes)
 	fmt.Println("Primera parte de fila a arbol")
 	root.treeBackboneFersto(&desiredNodes)
 	fmt.Println("Segunda parte de fila a arbol")
@@ -173,12 +195,12 @@ func (root *BinaryTree) PrintToRight() bool {
 }
 
 func (avl *BinaryTree) ToString(count int) string {
-	var indent string;
+	var indent string
 	count++
 	if !avl.IsEmpty() {
-		var buff string;
+		var buff string
 		buff += "[Key: " + fmt.Sprintf("%d", avl.key)
-		buff += "| Value: " + fmt.Sprintf("%d",avl.value)
+		buff += "| Value: " + fmt.Sprintf("%d", avl.value)
 		for i := 0; i < count; i++ {
 			indent += "\t"
 		}

@@ -24,6 +24,7 @@ func main() {
 	tree.Insert(25)
 	tree.Insert(40)
 	tree.Insert(23)
+	//fmt.Println(bt.CountNodes())
 	bt.BalanceDsw()
 	// tree.IRD()
 	//fmt.Println("\n", bt.PrintToRight())
