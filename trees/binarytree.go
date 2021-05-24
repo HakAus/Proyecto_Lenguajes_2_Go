@@ -21,11 +21,11 @@ func (tree *BinaryTree) Insert(keyToInsert int) int {
 	} else {
 		if keyToInsert == tree.key {
 			tree.value++
-			return +1
+			return +2
 		} else if keyToInsert < tree.key {
-			return tree.leftChildren.Insert(keyToInsert) + 2
+			return tree.leftChildren.Insert(keyToInsert) + 3
 		} else {
-			return tree.rightChildren.Insert(keyToInsert) + 2
+			return tree.rightChildren.Insert(keyToInsert) + 3
 		}
 	}
 }
@@ -120,7 +120,7 @@ func (root *BinaryTree) backboneTree() bool {
 //Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
 
 func (root *BinaryTree) CountNodes() int { //Considerar si contarlo o mantener un contador en el arbol
-	if root.IsEmpty() {
+	if root.IsEmpty() { //Puede ser parte de la interfaz
 		return 0
 	}
 	return root.leftChildren.CountNodes() + root.rightChildren.CountNodes() + 1

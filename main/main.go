@@ -4,6 +4,8 @@ import (
 	// "github.com/Xfighter32/Proyecto_Lenguajes_2_Go/randgen"
 	//"fmt"
 
+	"fmt"
+
 	"github.com/Xfighter32/Proyecto_Lenguajes_2_Go/trees"
 )
 
@@ -24,9 +26,10 @@ func main() {
 	tree.Insert(25)
 	tree.Insert(40)
 	tree.Insert(23)
+	tree.Insert(50)
 	//fmt.Println(bt.CountNodes())
 	bt.BalanceDsw()
 	// tree.IRD()
 	//fmt.Println("\n", bt.PrintToRight())
-	//fmt.Println(bt.ToString(0))
+	fmt.Println(bt.ToString(0))
 }
