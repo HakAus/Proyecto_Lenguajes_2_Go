@@ -13,7 +13,6 @@ func randomIntGenerator(seed int) func() int {
 	}
 }
 
-
 func isValidSeed(seed int) bool {
 	return isPrime(seed) && 11 <= seed && seed <= 101 
 }

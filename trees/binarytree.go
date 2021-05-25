@@ -76,7 +76,6 @@ func NewBinaryTree(newKey int, valueToInsert int) BinaryTree {
 func Binary_IRD_Rec(tree *BinaryTree) {
 	if !tree.IsBranchless() {
 		Binary_IRD_Rec(tree.leftChildren)
-		fmt.Println("key: ", tree.key, "value: ", tree.value)
 		Binary_IRD_Rec(tree.rightChildren)
 	}
 }
@@ -101,7 +100,6 @@ func (root *BinaryTree) rotateRight() {
 
 //Toma un arbol y lo convierte en una linaea rotando los nodos hacia la derecha
 func (root *BinaryTree) backboneTree() bool {
-	fmt.Println(root.key)
 	if root.IsEmpty() {
 
 		return false
@@ -119,13 +117,6 @@ func (root *BinaryTree) backboneTree() bool {
 //Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculador y se rotan en la primera fase
 //Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
 
-func (root *BinaryTree) CountNodes() int { //Considerar si contarlo o mantener un contador en el arbol
-	if root.IsEmpty() { //Puede ser parte de la interfaz
-		return 0
-	}
-	return root.leftChildren.CountNodes() + root.rightChildren.CountNodes() + 1
-}
-
 func getDesiredNodes(value int) int {
 	count := 0
 	desired := count
@@ -139,12 +130,8 @@ func getDesiredNodes(value int) int {
 }
 
 func (root *BinaryTree) treeBackbone() {
-	fmt.Println(root.CountNodes())
-	desiredNodes := getDesiredNodes(root.CountNodes())
-	fmt.Println("whahoooo", desiredNodes)
-	fmt.Println("Primera parte de fila a arbol")
+	desiredNodes := getDesiredNodes(CountNodes(root))
 	root.treeBackboneFersto(&desiredNodes)
-	fmt.Println("Segunda parte de fila a arbol")
 	root.treeBackboneSecando()
 }
 
@@ -165,26 +152,19 @@ func (root *BinaryTree) treeBackboneSecando() bool {
 	} else if root.rightChildren.rightChildren.IsEmpty() { //Se avanza de dos nodos a la vez para solamente alterar los impares
 		return false
 	} else {
-		fmt.Println("Secando", root.key)
 		root.rightChildren.rightChildren.treeBackboneSecando() //Puede quitarse el return?
-		fmt.Println("AfterSecando", root.key)
 		root.rotateLeft()
 	}
-	fmt.Println("Final", root.key)
 	return false
 }
 
 func (root *BinaryTree) BalanceDsw() {
-	fmt.Println("Start tree to backbone")
 	root.backboneTree()
-	root.PrintToRight()
-	fmt.Println("Start backbone to tree")
 	root.treeBackbone()
 	root.rotateLeft()
 }
 
 func (root *BinaryTree) PrintToRight() bool {
-	fmt.Println("ToRight")
 	if root.IsEmpty() {
 		return false
 	} else {

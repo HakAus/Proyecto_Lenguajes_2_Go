@@ -25,11 +25,7 @@ type AVLTree struct {
 func (tree *AVLTree) Insert(keyToInsert int) int {
 	comparisons := 0
 	change := false
-	fmt.Println("\nStart")
-	fmt.Printf("original avl address: %p \n", tree)
 	AVL_Insert(tree, keyToInsert,&comparisons,&change)
-	fmt.Println("Luego de la insercion")
-	// fmt.Println(tree.toString(0))
 	return comparisons
 }
 
@@ -80,16 +76,13 @@ func NewAVLTree(newKey int, valueToInsert int) (AVLTree) {
 func AVL_IRD_Rec(tree *AVLTree) {
 	if !tree.IsBranchless() {
 		AVL_IRD_Rec(tree.leftChildren)
-		fmt.Println("key: ",tree.key, "value: ", tree.value)
 		AVL_IRD_Rec(tree.rightChildren)
 	}
 }
 
 func AVL_Insert(avl *AVLTree, keyToInsert int, comparisons *int, change *bool) *AVLTree {
-	fmt.Printf("avl address: %p | avl key: %d | key to insert: %d \n",avl, avl.key, keyToInsert)
 	if avl.IsEmpty() {
 		*avl = NewAVLTree(keyToInsert, 1)
-		fmt.Printf("New tree added: %p | new key: %d \n", avl, avl.key)
 		*change = true
 	} else {
 		if keyToInsert == avl.key {
@@ -97,21 +90,16 @@ func AVL_Insert(avl *AVLTree, keyToInsert int, comparisons *int, change *bool) *
 			*comparisons += 1
 		} else if keyToInsert < avl.key {
 			*comparisons += 2
-			fmt.Println("Going left ...")
 			avl.leftChildren = AVL_Insert(avl.leftChildren, keyToInsert, comparisons, change)
-			fmt.Printf("Unwound avl address: %p | key: %d \n", avl, avl.key)
 
 			if (*change) {
 				switch avl.bf {
 				case rightImbalanced:
-					// fmt.Println("rightImbalanced")
 					avl.bf = balanced
 					*change = false
 				case balanced:
-					// fmt.Println("balanced")
 					avl.bf = leftImbalanced
 				case leftImbalanced:
-					// fmt.Println("leftImbalanced")
 					n1 := avl.leftChildren;
 					if n1.bf == leftImbalanced {
 						avl.rotateRight()
@@ -120,42 +108,30 @@ func AVL_Insert(avl *AVLTree, keyToInsert int, comparisons *int, change *bool) *
 					}
 					*change = false
 				}
-				fmt.Println("Luego del balanceo")
 			}
 		} else {
 			*comparisons += 2
-			fmt.Println("Going right ...")
 			avl.rightChildren = AVL_Insert(avl.rightChildren, keyToInsert, comparisons, change)
-			fmt.Printf("Unwound avl address: %p | key: %d \n", avl, avl.key)
 			
 			if (*change) {
 				switch avl.bf {
 				case rightImbalanced:
-					// fmt.Println("rightImbalanced")
 					n1 := avl.rightChildren
 					if n1.bf == rightImbalanced {
 						avl.rotateLeft()
-						fmt.Printf("FUR REAL: %p", avl)
 					} else {
 						avl.rotateRightLeft()
 					}
 					*change = false
 				case balanced:
-					// fmt.Println("balanced")
 					avl.bf = rightImbalanced
 				case leftImbalanced:
-					// fmt.Println("leftImbalanced")
 					avl.bf = balanced
 					*change = false
 				}
 			}
-			fmt.Println("Luego del balanceo")
 		}
 	}
-	fmt.Println("BEFORE RETURNING")
-	fmt.Printf("avl address: %p | avl key: %d \n", avl, avl.key)
-	fmt.Printf("avl left address: %p | avl key: %d \n", avl.leftChildren, avl.leftChildren.key)
-	fmt.Printf("avl right address: %p | avl key: %d \n", avl.rightChildren, avl.rightChildren.key)
 	return avl
 }
 
