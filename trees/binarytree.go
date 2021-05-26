@@ -139,7 +139,7 @@ func (root *BinaryTree) treeBackbone() {
 	fmt.Println(desiredNodes, "dn")
 	fmt.Println(balancedLeves, "bl")
 	root.treeBackboneFersto(&desiredNodes)
-	for times > 1 {
+	for times > 2 {
 		times /= 2
 		fmt.Println(root.heightToRight())
 		root.treeBackboneSecando()
@@ -173,7 +173,6 @@ func (root *BinaryTree) treeBackboneSecando() {
 func (root *BinaryTree) BalanceDsw() {
 	root.backboneTree()
 	root.treeBackbone()
-	//root.rotateLeft() //Rotacion extra es porque esta malo
 }
 
 func (root *BinaryTree) PrintToRight() bool {
