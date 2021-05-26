@@ -59,8 +59,10 @@ func (tree *BinaryTree) GetRightChildren() ITree {
 	return tree.rightChildren
 }
 
-func (tree *BinaryTree) IRD() {
-	Binary_IRD_Rec(tree)
+func (tree *BinaryTree) IRD() []int {
+	var answer []int
+	Binary_IRD_Rec(tree, &answer)
+	return answer
 }
 
 // LOCAL
@@ -73,10 +75,11 @@ func NewBinaryTree(newKey int, valueToInsert int) BinaryTree {
 	return newTree
 }
 
-func Binary_IRD_Rec(tree *BinaryTree) {
+func Binary_IRD_Rec(tree *BinaryTree, answer *[]int) {
 	if !tree.IsBranchless() {
-		Binary_IRD_Rec(tree.leftChildren)
-		Binary_IRD_Rec(tree.rightChildren)
+		Binary_IRD_Rec(tree.leftChildren, answer)
+		*answer = append(*answer, tree.key)
+		Binary_IRD_Rec(tree.rightChildren, answer)
 	}
 }
 
@@ -89,7 +92,7 @@ func (root *BinaryTree) rotateLeft() {
 	newRoot = nil
 }
 
-func (root *BinaryTree) rotateRight() {
+func (root *BinaryTree) rotateRight() { //Revisar rotaciones no se esta elimanndo el nodo
 	var newRoot *BinaryTree = root.leftChildren
 	root.leftChildren = newRoot.rightChildren
 	var newRight BinaryTree = *root
@@ -99,18 +102,15 @@ func (root *BinaryTree) rotateRight() {
 }
 
 //Toma un arbol y lo convierte en una linaea rotando los nodos hacia la derecha
-func (root *BinaryTree) backboneTree() bool {
-	if root.IsEmpty() {
-
-		return false
+func (root *BinaryTree) backboneTree() { //Rotar derecha no es el adecuado
+	if !root.IsEmpty() {
+		if root.leftChildren.IsEmpty() { //AQUI!!
+			root.rightChildren.backboneTree() //Aqui sigue habiendo un problema me parece
+		} else { //Se duplican los datos
+			root.rotateRight()
+			root.backboneTree() //Algo raro
+		}
 	}
-	if root.leftChildren.IsEmpty() {
-		return root.rightChildren.backboneTree()
-	} else {
-		root.rotateRight()
-		root.backboneTree()
-	}
-	return false
 }
 
 //Calcular cual sera la altura del arbol y repetir el proceso el numero de niveles completos
@@ -130,11 +130,20 @@ func getDesiredNodes(value int) int {
 }
 
 func (root *BinaryTree) treeBackbone() {
-	desiredNodes := getDesiredNodes(CountNodes(root))
+	totalNodes := CountNodes(root)
+	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLeves)))
+	fmt.Println(CountNodes(root), "nodes")
+	fmt.Println(desiredNodes, "dn")
+	fmt.Println(balancedLeves, "bl")
 	root.treeBackboneFersto(&desiredNodes)
-	root.treeBackboneSecando()
+	for root.heightToRight() > balancedLeves {
+		fmt.Println(root.heightToRight())
+		root.treeBackboneSecando()
+	}
 }
 
+//Rotaciones y punteros con algo de antes
+//Print to right podria usarse para contar
 func (root *BinaryTree) treeBackboneFersto(currentNodes *int) bool {
 	if *currentNodes == 0 { //No es necesario verificar los nodos vacios. Porque la cantidad de nodos deseada evita ese tpo de errores.
 		return false
@@ -146,46 +155,52 @@ func (root *BinaryTree) treeBackboneFersto(currentNodes *int) bool {
 	return false
 }
 
-func (root *BinaryTree) treeBackboneSecando() bool {
+func (root *BinaryTree) treeBackboneSecando() {
 	if root.rightChildren.IsEmpty() { //No se si sean necesarias las dos comparaciones. Para mantener la funcionalidad en casos donde no hay hijos derechos
-		return false
+		return
 	} else if root.rightChildren.rightChildren.IsEmpty() { //Se avanza de dos nodos a la vez para solamente alterar los impares
-		return false
+		return
 	} else {
 		root.rightChildren.rightChildren.treeBackboneSecando() //Puede quitarse el return?
 		root.rotateLeft()
 	}
-	return false
 }
 
 func (root *BinaryTree) BalanceDsw() {
 	root.backboneTree()
 	root.treeBackbone()
-	root.rotateLeft()
+	//root.rotateLeft() //Rotacion extra es porque esta malo
 }
 
 func (root *BinaryTree) PrintToRight() bool {
 	if root.IsEmpty() {
 		return false
 	} else {
-		fmt.Println(root.key)
-		fmt.Println(root.leftChildren)
+		fmt.Print(root.key, ",")
 		return root.rightChildren.PrintToRight()
 	}
 }
 
-func (avl *BinaryTree) ToString(count int) string {
+func (root *BinaryTree) heightToRight() float64 {
+	if root.IsEmpty() {
+		return 1
+	} else {
+		return root.rightChildren.heightToRight() + 1.0
+	}
+}
+
+func (avl *BinaryTree) ToString(indentAmount int) string {
 	var indent string
-	count++
+	indentAmount++
 	if !avl.IsEmpty() {
 		var buff string
 		buff += "[Key: " + fmt.Sprintf("%d", avl.key)
 		buff += "| Value: " + fmt.Sprintf("%d", avl.value)
-		for i := 0; i < count; i++ {
+		for i := 0; i < indentAmount; i++ {
 			indent += "\t"
 		}
-		buff += "\n" + indent + avl.leftChildren.ToString(count)
-		buff += "\n" + indent + avl.rightChildren.ToString(count)
+		buff += "\n" + indent + avl.leftChildren.ToString(indentAmount)
+		buff += "\n" + indent + avl.rightChildren.ToString(indentAmount)
 		return buff
 	}
 	return "Empty"

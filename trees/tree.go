@@ -9,7 +9,8 @@ type ITree interface {
 	GetValue() int
 	GetLeftChildren() ITree
 	GetRightChildren() ITree
-	IRD()
+	IRD() []int
+	ToString(int) string
 }
 
 func TreeSearch(tree ITree, toFind int) (bool, int) {
@@ -94,4 +95,13 @@ func CountNodes(tree ITree) int {
 
 func Density(tree ITree) float64 {
 	return float64(CountNodes(tree) / Height(tree))
+}
+
+func CompareTrees(tree1 ITree, tree2 ITree) bool {
+	if tree1.IsEmpty() && tree2.IsEmpty() {
+		return true
+	}
+	return tree1.GetValue() == tree2.GetValue() &&
+		CompareTrees(tree1.GetLeftChildren(), tree2.GetLeftChildren()) &&
+		CompareTrees(tree1.GetRightChildren(), tree2.GetRightChildren())
 }

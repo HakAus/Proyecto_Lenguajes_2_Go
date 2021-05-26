@@ -6,31 +6,6 @@ import (
 	"github.com/Xfighter32/Proyecto_Lenguajes_2_Go/randgen"
 )
 
-//Funcion que for( recibe los n y genera los arboles) para cada cantidad y la insercion de todos los elementos
-//Se crean 2 arboles binarios ordinarios 1 AVL
-//Despues transformar el Binario a DSW
-//Generrar una secuencia de 10 000 pseudo aleatorios 1 para los 3 arboles y realizar busquedas
-
-//struct (arbol,comparaciones,altura maxima,altura promedio, promedio de comparaciones ) tree_stats metodos de insercion que recibe
-//el arreglo y metodos de medir altura e insertar comparaciones
-//arbol.altura
-
-//Metodos de arboles
-//Altura de los arboles //Altura de un arbol
-//Altura promedio de los arboles // Por definir?
-//Promedio comparaciones sum(compariones*nivel)/total
-
-//tree_stats
-
-// *Se generan 15 tree_stat y 5 arreglos*
-//tree_stats.start()//Crea los arreglos y los tree_stats con su respectivo arbol por cada n se los inserta a un nuevo tree_stats
-
-//tree_stats.populate_tree(Array)
-
-//*tree_stats.transformDSW()
-
-//tree_stats.searchInTree(array) //Recibe el arreglo de 10 000 e internamente acumulara las comparaciones
-
 type TreeStats struct {
 	tree        ITree
 	comparisons int

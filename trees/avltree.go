@@ -58,8 +58,10 @@ func (tree * AVLTree) GetRightChildren() ITree {
 	return tree.rightChildren
 }
 
-func (tree *AVLTree) IRD() {
-	AVL_IRD_Rec(tree)
+func (tree *AVLTree) IRD() []int {
+	var answer []int
+	AVL_IRD_Rec(tree, &answer)
+	return answer
 }
 
 // LOCAL
@@ -73,10 +75,11 @@ func NewAVLTree(newKey int, valueToInsert int) (AVLTree) {
 	return newTree
 }
 
-func AVL_IRD_Rec(tree *AVLTree) {
+func AVL_IRD_Rec(tree *AVLTree, answer *[]int) {
 	if !tree.IsBranchless() {
-		AVL_IRD_Rec(tree.leftChildren)
-		AVL_IRD_Rec(tree.rightChildren)
+		AVL_IRD_Rec(tree.leftChildren, answer)
+		*answer = append(*answer, tree.key)
+		AVL_IRD_Rec(tree.rightChildren, answer)
 	}
 }
 
