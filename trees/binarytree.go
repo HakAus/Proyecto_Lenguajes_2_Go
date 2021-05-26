@@ -130,14 +130,17 @@ func getDesiredNodes(value int) int {
 }
 
 func (root *BinaryTree) treeBackbone() {
+
 	totalNodes := CountNodes(root)
 	balancedLeves := math.Floor(math.Log2(float64(totalNodes)))
-	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLeves)))
+	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLeves))) + 1
+	times := totalNodes
 	fmt.Println(CountNodes(root), "nodes")
 	fmt.Println(desiredNodes, "dn")
 	fmt.Println(balancedLeves, "bl")
 	root.treeBackboneFersto(&desiredNodes)
-	for root.heightToRight() > balancedLeves {
+	for times > 1 {
+		times /= 2
 		fmt.Println(root.heightToRight())
 		root.treeBackboneSecando()
 	}

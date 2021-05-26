@@ -27,6 +27,7 @@ func StartStats() {
 		dsw.populate(size)
 		dsw.TransformDSW()
 		avl.populate(size)
+		fmt.Println(dsw.tree.ToString(0))
 
 		// Se genera una secuencia de 10 000 números aleatorios
 		biglist := randgen.GetRandomArray(17, 10000)
