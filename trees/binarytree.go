@@ -131,6 +131,7 @@ func getDesiredNodes(value int) int {
 
 func (root *BinaryTree) treeBackbone() {
 	totalNodes := CountNodes(root)
+	balancedLeves := math.Floor(math.Log2(float64(totalNodes)))
 	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLeves)))
 	fmt.Println(CountNodes(root), "nodes")
 	fmt.Println(desiredNodes, "dn")
