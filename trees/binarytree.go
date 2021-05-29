@@ -117,27 +117,12 @@ func (root *BinaryTree) backboneTree() { //Rotar derecha no es el adecuado
 //Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculador y se rotan en la primera fase
 //Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
 
-func getDesiredNodes(value int) int {
-	count := 0
-	desired := count
-	exp := 0.0
-	for count <= value {
-		desired = count
-		count += int(math.Pow(2, exp))
-		exp += 1
-	}
-	return value - desired
-}
-
 func (root *BinaryTree) treeBackbone() {
 
 	totalNodes := CountNodes(root)
-	balancedLeves := math.Floor(math.Log2(float64(totalNodes)))
-	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLeves))) + 1
+	balancedLevels := math.Floor(math.Log2(float64(totalNodes)))
+	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLevels))) + 1
 	times := totalNodes
-	fmt.Println(CountNodes(root), "nodes")
-	fmt.Println(desiredNodes, "dn")
-	fmt.Println(balancedLeves, "bl")
 	root.treeBackboneFersto(&desiredNodes)
 	for times > 2 {
 		times /= 2
