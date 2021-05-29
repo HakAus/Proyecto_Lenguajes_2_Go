@@ -101,7 +101,7 @@ func (root *BinaryTree) rotateRight() { //Revisar rotaciones no se esta elimannd
 	newRoot = nil
 }
 
-//Toma un arbol y lo convierte en una linaea rotando los nodos hacia la derecha
+//Toma un arbol y lo convierte en una linea rotando los nodos hacia la derecha
 func (root *BinaryTree) backboneTree() { //Rotar derecha no es el adecuado
 	if !root.IsEmpty() {
 		if root.leftChildren.IsEmpty() { //AQUI!!
@@ -116,7 +116,6 @@ func (root *BinaryTree) backboneTree() { //Rotar derecha no es el adecuado
 //Calcular cual sera la altura del arbol y repetir el proceso el numero de niveles completos
 //Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculador y se rotan en la primera fase
 //Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
-
 func (root *BinaryTree) treeBackbone() {
 
 	totalNodes := CountNodes(root)

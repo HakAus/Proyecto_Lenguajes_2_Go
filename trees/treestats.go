@@ -29,6 +29,7 @@ func StartStats() {
 		dsw.populate(size)
 		dsw.TransformDSW()
 		avl.populate(size)
+		fmt.Println("Comparaciones de inserción de binario: ", bt.insertComparisons)
 
 		// Se genera una secuencia de 10 000 números aleatorios
 		biglist := randgen.GetRandomArray(17, 10000,200)
@@ -79,7 +80,7 @@ func getMethodStat(treeType string, trees []TreeStats, statFunc func(TreeStats))
 	}
 }
 
-func (ts TreeStats) getInfo() {
+func (ts TreeStats) getStatsHeader() {
 	switch ts.tree.(type) {
 	case *BinaryTree:
 		if ts.isDSW {
@@ -93,7 +94,7 @@ func (ts TreeStats) getInfo() {
 }
 
 func (ts TreeStats) getStats() {
-	ts.getInfo()
+	ts.getStatsHeader()
 	// Calcular la altura
 	fmt.Printf("Altura máxima: %d \n", Height(ts.tree))
 	// Altura promedio
@@ -107,14 +108,14 @@ func (ts TreeStats) getStats() {
 }
 
 //Utiliza el arbol dentro de tree_stats y le inserta todos los elementos del array
-func (ts TreeStats) populate(size int) {
+func (ts *TreeStats) populate(size int) {
 	randnums := randgen.GetRandomArray(17, size, 200)
 	for _, value := range randnums {
 		ts.insertComparisons += ts.tree.Insert(value)
 	}
 }
 
-func (ts TreeStats) TransformDSW() {
+func (ts *TreeStats) TransformDSW() {
 	switch typedTree := ts.tree.(type) {
 	case *BinaryTree:
 		typedTree.BalanceDsw()
