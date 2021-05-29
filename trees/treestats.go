@@ -7,27 +7,28 @@ import (
 )
 
 type TreeStats struct {
-	tree        ITree
-	comparisons int
-	size        int
-	isDSW       bool
+	tree              ITree
+	comparisons       int
+	insertComparisons int
+	size              int
+	isDSW             bool
 }
 
 func StartStats() {
 	// Casos de prueba
 	sizes := []int{200, 400, 600, 800, 1000}
-
+	trees := []TreeStats{}
 	// Llenado de árboles
 	for _, size := range sizes {
 		fmt.Printf("-----------------------------------------------%d-----------------------------------------------\n", size)
 		bt := TreeStats{tree: &BinaryTree{}, size: size, isDSW: false}
 		dsw := TreeStats{tree: &BinaryTree{}, size: size, isDSW: true}
 		avl := TreeStats{tree: &AVLTree{}, size: size, isDSW: false}
+
 		bt.populate(size)
 		dsw.populate(size)
 		dsw.TransformDSW()
 		avl.populate(size)
-		fmt.Println(dsw.tree.ToString(0))
 
 		// Se genera una secuencia de 10 000 números aleatorios
 		biglist := randgen.GetRandomArray(17, 10000,200)
@@ -41,11 +42,41 @@ func StartStats() {
 		bt.getStats()
 		dsw.getStats()
 		avl.getStats()
+
+		trees = append(trees, bt)
+		trees = append(trees, dsw)
+		trees = append(trees, avl)
+
 		fmt.Println("------------------------------------------------------------------------------------------------")
 	}
 
 	fmt.Println("Finished!")
+	getMethodStat("bt", trees, getInsertResults)
+	getMethodStat("dsw", trees, getInsertResults)
+	getMethodStat("avl", trees, getInsertResults)
+}
 
+func getInsertResults(ts TreeStats) {
+	fmt.Printf("Resultados de comparaciones de insercion en arbol de tamano %d: %d\n", ts.size, ts.insertComparisons)
+}
+
+func getMethodStat(treeType string, trees []TreeStats, statFunc func(TreeStats)) {
+	var start int
+	increase := 3
+
+	switch treeType {
+	case "bt":
+		start = 0
+	case "dsw":
+		start = 1
+	case "avl":
+		start = 2
+	}
+	fmt.Println("Arbol ", treeType)
+	for start < len(trees) {
+		statFunc(trees[start])
+		start += increase
+	}
 }
 
 func (ts TreeStats) getInfo() {
@@ -79,7 +110,7 @@ func (ts TreeStats) getStats() {
 func (ts TreeStats) populate(size int) {
 	randnums := randgen.GetRandomArray(17, size, 200)
 	for _, value := range randnums {
-		ts.tree.Insert(value)
+		ts.insertComparisons += ts.tree.Insert(value)
 	}
 }
 

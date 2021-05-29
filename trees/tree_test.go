@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-// Expected tree
-//    2
-//      10
-//     4
 func TestTreeHeight3(t *testing.T) {
 	bt := BinaryTree{}
 	bt.Insert(2)
@@ -94,10 +90,3 @@ func EqualSlices(a, b []int) bool {
 	}
 	return true
 }
-
-//			30
-//		  23		 40
-//	 15 	25
-//	7 20
-//5 10
-
