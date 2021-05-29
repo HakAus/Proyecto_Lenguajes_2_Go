@@ -30,7 +30,7 @@ func StartStats() {
 		fmt.Println(dsw.tree.ToString(0))
 
 		// Se genera una secuencia de 10 000 números aleatorios
-		biglist := randgen.GetRandomArray(17, 10000)
+		biglist := randgen.GetRandomArray(17, 10000,200)
 
 		// Se realizan las busquedas en cada uno de los árboles
 		bt.search(biglist)
@@ -66,7 +66,7 @@ func (ts TreeStats) getStats() {
 	// Calcular la altura
 	fmt.Printf("Altura máxima: %d \n", Height(ts.tree))
 	// Altura promedio
-	fmt.Printf("Altura primedio: %f \n", GetAvgHeight(ts.tree))
+	fmt.Printf("Altura promedio: %f \n", GetAvgHeight(ts.tree))
 	// Densidad del árbol
 	fmt.Printf("Densidad del árbol: %f \n", Density(ts.tree))
 	// Cantidad total de comparaciones realizadas
@@ -77,7 +77,7 @@ func (ts TreeStats) getStats() {
 
 //Utiliza el arbol dentro de tree_stats y le inserta todos los elementos del array
 func (ts TreeStats) populate(size int) {
-	randnums := randgen.GetRandomArray(17, size)
+	randnums := randgen.GetRandomArray(17, size, 200)
 	for _, value := range randnums {
 		ts.tree.Insert(value)
 	}

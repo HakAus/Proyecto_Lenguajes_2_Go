@@ -33,18 +33,19 @@ func isValidSize(size int) bool {
 }
 
 // Para que el resultado este en el rango 0 .. 199
-func mapNumber(value, start1, stop1, start2, stop2 int) int {
-	return int(float32((value - start1)) / float32((stop1 - start1)) * float32((stop2 - start2)) + float32(start2))
-}
+// Función extra
+// func mapNumber(value, start1, stop1, start2, stop2 int) int {
+// 	return int(float32((value - start1)) / float32((stop1 - start1)) * float32((stop2 - start2)) + float32(start2))
+// }
 
-func GetRandomArray(seed int, size int) []int {
+func GetRandomArray(seed, size, modulus int) []int {
 	// Check that seed is prime and between 11 and 101
 	if isValidSeed(seed) && isValidSize(size){
 		array := make([]int, size)
 		// Generate n random numbers
 		nextRandom := randomIntGenerator(seed)
 		for index := 0; index < size; index++ {
-			array[index] = mapNumber(nextRandom(),0,4095,0,199)
+			array[index] = nextRandom()%modulus
 		}
 		return array
 	} else {

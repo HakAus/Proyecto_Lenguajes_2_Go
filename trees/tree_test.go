@@ -1,7 +1,7 @@
 package trees
 
 import (
-	"fmt"
+	// "fmt"
 	"testing"
 )
 
@@ -60,7 +60,7 @@ func TestDSW(t *testing.T) {
 	tree2.Insert(10)
 
 	bt.BalanceDsw()
-	fmt.Println(bt.ToString(0))
+	// fmt.Println(bt.ToString(0))
 	got := Height(tree)
 	if got != 4 {
 		t.Errorf("Height(bt) = %d ; want 4", got)
@@ -100,3 +100,4 @@ func EqualSlices(a, b []int) bool {
 //	 15 	25
 //	7 20
 //5 10
+
