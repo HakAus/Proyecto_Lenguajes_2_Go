@@ -5,7 +5,7 @@ import "fmt"
 // Function that returns a pseudo-random integer using the linear cnogruentional method outlined by Dromey in "How to solve it by computer" (1982)
 
 // Closure
-func randomIntGenerator(seed int) func() int {
+func RandomIntGenerator(seed int) func() int {
 	var a, b, m int = 109, 853, 4096
 	return func() int {
 		seed = ((a * seed + b) % m) 
@@ -14,7 +14,12 @@ func randomIntGenerator(seed int) func() int {
 }
 
 func isValidSeed(seed int) bool {
-	return isPrime(seed) && 11 <= seed && seed <= 101 
+	if isPrime(seed) && 11 <= seed && seed <= 101 {
+		return true
+	} else {
+		fmt.Println("Verifique que la semilla es un valor primo entre 11 y 101.")
+		return false
+	}
 }
 
 func isPrime(number int) bool {
@@ -28,28 +33,25 @@ func isPrime(number int) bool {
 	return true
 }
 
-func isValidSize(size int) bool {
-	return size >= 200 || size <= 1000
+/* 
+Función que escala un número de un rango a otro.
+En el proyecto se utiliza para mapear los valores del rango 0..4095
+a 0..199
+*/
+func mapNumber(value, start1, stop1, start2, stop2 int) int {
+	return int(float32((value - start1)) / float32((stop1 - start1)) * float32((stop2 - start2)) + float32(start2))
 }
 
-// Para que el resultado este en el rango 0 .. 199
-// Función extra
-// func mapNumber(value, start1, stop1, start2, stop2 int) int {
-// 	return int(float32((value - start1)) / float32((stop1 - start1)) * float32((stop2 - start2)) + float32(start2))
-// }
-
-func GetRandomArray(seed, size, modulus int) []int {
+func GetRandomArray(seed, size int) []int {
 	// Check that seed is prime and between 11 and 101
-	if isValidSeed(seed) && isValidSize(size){
+	if isValidSeed(seed) {
 		array := make([]int, size)
 		// Generate n random numbers
-		nextRandom := randomIntGenerator(seed)
+		nextRandom := RandomIntGenerator(seed)
 		for index := 0; index < size; index++ {
-			array[index] = nextRandom()%modulus
+			array[index] = mapNumber(nextRandom(), 0, 4096, 0, 200)
 		}
 		return array
-	} else {
-		fmt.Println("Verifique que la semilla es un valor primo entre 11 y 101. Además, el tamaño del arreglo debe estar entre 200 y 1000")
 	}
 	return nil
 }

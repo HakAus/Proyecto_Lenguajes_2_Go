@@ -36,7 +36,8 @@ func (tree *BinaryTree) Search(toFind int) (bool, int) {
 }
 
 func (tree *BinaryTree) IsEmpty() bool {
-	return tree.key == 0 && tree.value == 0 && tree.leftChildren == nil && tree.rightChildren == nil
+	// Todo nuevo nodo es insertado con value 1 por tanto con verificar que sea 0 es suficiente.
+	return tree.value == 0
 }
 
 func (tree *BinaryTree) IsBranchless() bool {
@@ -92,7 +93,7 @@ func (root *BinaryTree) rotateLeft() {
 	newRoot = nil
 }
 
-func (root *BinaryTree) rotateRight() { //Revisar rotaciones no se esta elimanndo el nodo
+func (root *BinaryTree) rotateRight() {
 	var newRoot *BinaryTree = root.leftChildren
 	root.leftChildren = newRoot.rightChildren
 	var newRight BinaryTree = *root
@@ -102,22 +103,21 @@ func (root *BinaryTree) rotateRight() { //Revisar rotaciones no se esta elimannd
 }
 
 //Toma un arbol y lo convierte en una linea rotando los nodos hacia la derecha
-func (root *BinaryTree) backboneTree() { //Rotar derecha no es el adecuado
+func (root *BinaryTree) backboneTree() {
 	if !root.IsEmpty() {
-		if root.leftChildren.IsEmpty() { //AQUI!!
-			root.rightChildren.backboneTree() //Aqui sigue habiendo un problema me parece
-		} else { //Se duplican los datos
+		if root.leftChildren.IsEmpty() { 
+			root.rightChildren.backboneTree()
+		} else { 
 			root.rotateRight()
-			root.backboneTree() //Algo raro
+			root.backboneTree() 
 		}
 	}
 }
 
-//Calcular cual sera la altura del arbol y repetir el proceso el numero de niveles completos
-//Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculador y se rotan en la primera fase
-//Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares
+/* Calcular cual sera la altura del arbol y repetir el proceso el numero de niveles completos
+Se hace una rotacion inicial. Donde los nodos del nivel inferios son calculados y se rotan en la primera fase
+Toma el backbone creado y lo convierte en un arbol rotando a la izquierda el resto de nodos impares*/
 func (root *BinaryTree) treeBackbone() {
-
 	totalNodes := CountNodes(root)
 	balancedLevels := math.Floor(math.Log2(float64(totalNodes)))
 	desiredNodes := totalNodes - int(math.Pow(2, float64(balancedLevels))) + 1
@@ -125,31 +125,27 @@ func (root *BinaryTree) treeBackbone() {
 	root.treeBackboneFersto(&desiredNodes)
 	for times > 2 {
 		times /= 2
-		fmt.Println(root.heightToRight())
 		root.treeBackboneSecando()
 	}
 }
 
 //Rotaciones y punteros con algo de antes
-//Print to right podria usarse para contar
-func (root *BinaryTree) treeBackboneFersto(currentNodes *int) bool {
-	if *currentNodes == 0 { //No es necesario verificar los nodos vacios. Porque la cantidad de nodos deseada evita ese tpo de errores.
-		return false
-	} else {
+func (root *BinaryTree) treeBackboneFersto(currentNodes *int) {
+	//No es necesario verificar los nodos vacios. Porque la cantidad de nodos deseada evita ese tipo de errores.
+	if *currentNodes != 0 {
 		*currentNodes -= 1
 		root.rightChildren.rightChildren.treeBackboneFersto(currentNodes)
 		root.rotateLeft()
 	}
-	return false
 }
 
 func (root *BinaryTree) treeBackboneSecando() {
-	if root.rightChildren.IsEmpty() { //No se si sean necesarias las dos comparaciones. Para mantener la funcionalidad en casos donde no hay hijos derechos
+	if root.rightChildren.IsEmpty() {
 		return
 	} else if root.rightChildren.rightChildren.IsEmpty() { //Se avanza de dos nodos a la vez para solamente alterar los impares
 		return
 	} else {
-		root.rightChildren.rightChildren.treeBackboneSecando() //Puede quitarse el return?
+		root.rightChildren.rightChildren.treeBackboneSecando()
 		root.rotateLeft()
 	}
 }
@@ -165,14 +161,6 @@ func (root *BinaryTree) PrintToRight() bool {
 	} else {
 		fmt.Print(root.key, ",")
 		return root.rightChildren.PrintToRight()
-	}
-}
-
-func (root *BinaryTree) heightToRight() float64 {
-	if root.IsEmpty() {
-		return 1
-	} else {
-		return root.rightChildren.heightToRight() + 1.0
 	}
 }
 

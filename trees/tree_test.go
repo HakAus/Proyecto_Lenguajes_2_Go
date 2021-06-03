@@ -1,8 +1,11 @@
 package trees
 
 import (
-	// "fmt"
+	"fmt"
+	// "math"
 	"testing"
+
+	"github.com/Xfighter32/Proyecto_Lenguajes_2_Go/randgen"
 )
 
 func TestTreeHeight3(t *testing.T) {
@@ -56,7 +59,6 @@ func TestDSW(t *testing.T) {
 	tree2.Insert(10)
 
 	bt.BalanceDsw()
-	// fmt.Println(bt.ToString(0))
 	got := Height(tree)
 	if got != 4 {
 		t.Errorf("Height(bt) = %d ; want 4", got)
@@ -90,3 +92,27 @@ func EqualSlices(a, b []int) bool {
 	}
 	return true
 }
+
+func mapNumber(value, start1, stop1, start2, stop2 int) int {
+	return  int(float64((value - start1)) / float64((stop1 - start1)) * float64((stop2 - start2)) + float64(start2))
+}
+
+func BenchmarkRandomArray200(b *testing.B) {
+	dict := make([]int, 200)
+	nextRandom := randgen.RandomIntGenerator(23)
+	fmt.Println("N: ", b.N)
+	for i := 0; i < b.N; i++ {
+		v := mapNumber(nextRandom(), 0, 4096, 0, 200)
+		if v == 200 {
+			fmt.Println("\n NOOOO ")
+		}
+		dict[v]++
+	}
+	var results string
+	for _, freq := range dict {
+		results += fmt.Sprintf("%d", freq) + ","
+	}
+	fmt.Println("RESULTADOS: ", results)
+}
+
+
